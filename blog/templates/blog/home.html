@@ -1,0 +1,68 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+
+{% block main %}
+  <!-- Page Header-->
+        <header class="masthead" style="background-image: url('{% static 'assets/img/home-bg.jpg' %}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>سیلسیم</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+ 
+ 
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <!-- Post preview-->                
+                    {% for article in articles %}
+                   <div class="post-preview">
+                        <a href="{% url 'blog:detailview' article.slug %}">
+                            <h2 class="post-title">{{article.title}}</h2>
+                            <h3 class="post-subtitle">{{ article.description|truncatewords:30 }}</h3>
+                        </a>
+                        <p class="post-meta">
+                        <a href="#">{{article.author.get_full_name}}</a>
+                          
+                            {% for cat in article.category.all %}
+                            <div>
+                            <a href="{% url 'blog:category' cat.slug %}">#{{cat.title}}</a>
+                            </div>
+                            {% endfor %}
+
+                          {{article.jpublish}}
+                        </p>
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4" />
+                   {% endfor %}
+
+
+
+
+                    <!-- Pager-->
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if articles.has_previous %}
+                                <a href="{% url 'blog:home' articles.previous_page_number %}">previous</a>
+                            {% endif %}
+                    
+                            <span class="current">
+                                Page {{ articles.number }} of {{ articles.paginator.num_pages }}
+                            </span>
+                    
+                            {% if articles.has_next %}
+                                <a href="{% url 'blog:home' articles.next_page_number %}">next</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
